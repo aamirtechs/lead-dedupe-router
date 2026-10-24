@@ -111,3 +111,16 @@ test("parseLeads reads a CSV with the documented columns", () => {
   assert.strictEqual(leads[0].state, "NY");
   assert.strictEqual(leads[0].debt_amount, 12000);
 });
+
+test("address signal raises a fuzzy score but never creates one", () => {
+  const a = { first_name: "Jane", last_name: "Doe", zip: "10001", address: "12 Main Street" };
+  const b = { first_name: "Jane", last_name: "Does", zip: "10001", address: "12 Main St" };
+  const base = L.pairScore(a, b, {});
+  const raised = L.pairScore(a, b, { addressSignal: true });
+  assert.ok(raised.score > base.score);
+  assert.ok(raised.reasons.some((r) => r.indexOf("address similarity") === 0));
+
+  const c = { first_name: "Jane", last_name: "Doe", zip: "99999", address: "12 Main Street" };
+  const alone = L.pairScore(a, c, { addressSignal: true });
+  assert.equal(alone.score, 0);
+});
