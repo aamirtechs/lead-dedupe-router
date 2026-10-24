@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Dedupe Router: Dedupe and route inbound leads by phone, email and fuzzy name plus ZIP, route by state and debt band, and track duplicate-lead vendor credits in one browser tool</title>
+<meta name="description" content="Dedupe and route inbound leads by phone, email and fuzzy name plus ZIP, route by state and debt band, and track duplicate-lead vendor credits in one browser tool.">
+<meta name="keywords" content="lead deduplication tool, lead routing rules engine, duplicate lead checker CSV, fuzzy lead matching, lead vendor credit ledger">
+<meta name="author" content="Amir Hussain">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aamirtechs.github.io/lead-dedupe-router/">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0b1f3a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lead Dedupe Router">
+<meta property="og:description" content="Dedupe and route inbound leads by phone, email and fuzzy name plus ZIP, route by state and debt band, and track duplicate-lead vendor credits in one browser tool.">
+<meta property="og:url" content="https://aamirtechs.github.io/lead-dedupe-router/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lead Dedupe Router">
+<meta name="twitter:description" content="Dedupe and route inbound leads by phone, email and fuzzy name plus ZIP, route by state and debt band, and track duplicate-lead vendor credits in one browser tool.">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Lead Dedupe Router", "applicationCategory": "BusinessApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "author": {"@type": "Person", "name": "Amir Hussain", "url": "https://aamirtechs.com"}, "url": "https://aamirtechs.github.io/lead-dedupe-router/", "description": "Dedupe and route inbound leads by phone, email and fuzzy name plus ZIP, route by state and debt band, and track duplicate-lead vendor credits in one browser tool."}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b1f3a;--navy2:#122c50;--gold:#d4a72c;--ink:#16233a;--muted:#5a6a84;--line:#e3e9f2;--bg:#f6f8fb;--card:#ffffff}
+*{box-sizing:border-box}body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:44px 20px 34px;text-align:center}
+header h1{font-family:'Sora',sans-serif;font-size:2rem;margin:0 0 10px}header h1 span{color:var(--gold)}
+header p{max-width:720px;margin:0 auto 16px;color:#dbe4f2}
+.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.stats span{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 14px;font-size:.85rem}
+main{max-width:980px;margin:-18px auto 0;padding:0 16px 30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 8px 30px rgba(11,31,58,.08)}
+label{display:block;font-weight:700;font-size:.9rem;margin:14px 0 6px}
+textarea,input[type=text],input[type=number],select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+textarea{min-height:150px;font-family:ui-monospace,Menlo,monospace;font-size:.85rem}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.btn-run{background:var(--gold);color:var(--navy);border:0;border-radius:9px;padding:12px 22px;font-weight:800;cursor:pointer;font-size:1rem;margin-top:16px}
+.btn-sub{background:var(--navy);color:#fff;border:0;border-radius:9px;padding:10px 16px;font-weight:700;cursor:pointer;margin:8px 8px 0 0}
+.btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--navy);border-radius:9px;padding:9px 15px;font-weight:700;cursor:pointer;margin:8px 8px 0 0}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.87rem}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--navy);color:#fff}
+.flag{color:#b3261e;font-weight:700}.ok{color:#137333;font-weight:700}
+pre{background:#0b1f3a;color:#e8eef8;border-radius:10px;padding:14px;overflow:auto;font-size:.82rem;white-space:pre-wrap;word-break:break-word}
+.privacy{color:var(--muted);font-size:.9rem;margin-top:14px}
+section.how{max-width:980px;margin:22px auto;padding:0 16px}
+section.how h2{font-family:'Sora',sans-serif}
+footer{background:var(--navy);color:#dbe4f2;text-align:center;padding:24px 16px;margin-top:30px;font-size:.92rem}
+footer a{color:var(--gold)}
+.small{font-size:.85rem;color:var(--muted)}
+.warn{background:#fdf6e0;border:1px solid var(--gold);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Lead Dedupe <span>Router</span></h1>
+  <p>Dedupe inbound leads, route them by state and debt band, and track the duplicate credits vendors owe you.</p>
+  <div class="stats"><span>Free</span><span>100% in your browser</span><span>No sign-up</span></div>
+</header>
+<main>
+  <div class="card">
+    <label for="fileInput">Upload a leads CSV</label>
+    <input type="file" id="fileInput" accept=".csv,text/csv,text/plain">
+    <label for="csvInput">Or paste CSV here</label>
+    <textarea id="csvInput">lead_id,first_name,last_name,phone,email,zip,state,debt_amount,vendor,source,received_at
+L-1,Lead,Person 1,555-010-1001,person1@example.com,10001,NY,15000,Vendor A,web,2026-10-01
+L-2,Lead,Person 1,+1 555 010 1001,other1@example.com,10001,NY,15000,Vendor B,affiliate,2026-10-02
+L-3,Lead,Person 2,555-010-1002,person2@example.com,90210,CA,32000,Vendor A,web,2026-10-01
+L-4,Lead,Persn 2,555-010-2002,person2b@example.com,90210,CA,32000,Vendor C,affiliate,2026-10-03
+L-5,Lead,Person 3,555-010-1003,person3@example.com,06001,CT,18000,Vendor A,web,2026-10-02
+L-6,Lead,Person 4,555-010-1004,person4@example.com,73301,TX,6000,Vendor B,partner,2026-10-03</textarea>
+    <div class="row">
+      <div><label for="threshInput">Human-review threshold (clusters below this confidence are flagged)</label><input type="number" id="threshInput" value="0.8" step="0.05" min="0" max="1"></div>
+    </div>
+    <label for="configInput">Routing config (editable JSON: eligible states, debt bands, partner priority)</label>
+    <textarea id="configInput" style="min-height:170px"></textarea>
+    <button class="btn-run" id="runBtn">Dedupe and route</button>
+    <div id="summary" class="small" style="margin-top:12px"></div>
+    <div id="results"></div>
+    <button class="btn-sub" id="dlRouted" type="button" style="display:none">Download routed leads CSV</button>
+    <button class="btn-sub" id="dlLedger" type="button" style="display:none">Download credit ledger CSV</button>
+    <p class="privacy">Runs 100% in your browser. Your files never leave this device.</p>
+  </div>
+</main>
+<section class="how">
+  <h2>How it works</h2>
+  <ul>
+    <li>Normalises phone numbers to digits with the country code stripped, emails to lowercase, and names to a clean lowercase form.</li>
+    <li>Groups duplicates by exact phone or exact email, plus fuzzy name and ZIP matches scored with a documented Levenshtein and token method.</li>
+    <li>Nothing is auto-merged: every cluster shows its confidence, and clusters below the review threshold are flagged for a human.</li>
+    <li>Routes each lead with an editable rules config: state eligibility first, then debt band, then partner priority.</li>
+    <li>Builds a duplicate-credit ledger (vendor, lead, duplicate-of, credit status pending) and funnel counts by source. Sample leads are synthetic only.</li>
+  </ul>
+</section>
+<footer>
+  <p>Built by Amir Hussain, operations manager and founder of <a href="https://aamirtechs.com" target="_blank" rel="noopener">AamirTechs: operations, customer support and e-commerce services</a>.</p>
+  <p><a href="https://github.com/aamirtechs" target="_blank" rel="noopener">More open source tools on GitHub</a></p>
+</footer>
+<script src="src/logic.js"></script>
+<script>
+var L = window.LeadDedupeRouter;
+var lastRouted = null, lastLedger = null;
+function esc(v){return String(v===null||v===undefined?"":v).replace(/</g,"&lt;");}
+function run(){
+  var leads = L.parseLeads(document.getElementById("csvInput").value);
+  var cfg;
+  try { cfg = L.parseConfigJSON(document.getElementById("configInput").value); } catch(e){ cfg = L.DEFAULT_CONFIG; }
+  var threshold = Number(document.getElementById("threshInput").value) || 0.8;
+  var clusters = L.detectDuplicates(leads, { threshold: threshold });
+  lastRouted = L.routeLeads(leads, cfg);
+  lastLedger = L.buildCreditLedger(clusters);
+  var funnel = L.funnelCounts(leads, lastRouted, clusters);
+  document.getElementById("summary").textContent = funnel.total + " leads: " + funnel.routed + " routed, " + funnel.duplicates + " duplicates in " + clusters.length + " clusters, " + funnel.ineligible + " ineligible.";
+  var html = "<h3>Funnel by source</h3><table><tr><th>Source</th><th>Total</th><th>Routed</th><th>Duplicates</th><th>Ineligible</th></tr>";
+  funnel.bySource.forEach(function(s){ html += "<tr><td>"+esc(s.source)+"</td><td>"+s.total+"</td><td>"+s.routed+"</td><td>"+s.duplicates+"</td><td>"+s.ineligible+"</td></tr>"; });
+  html += "</table><h3>Duplicate clusters (never auto-merged)</h3><table><tr><th>Cluster</th><th>Leads</th><th>Confidence</th><th>Why</th><th>Human review</th></tr>";
+  clusters.forEach(function(c){ html += "<tr><td>"+esc(c.clusterId)+"</td><td>"+esc(c.leadIds.join(", "))+"</td><td>"+c.confidence+"</td><td>"+esc(c.reasons.join("; "))+"</td><td>"+(c.needsReview?'<span class="flag">Yes</span>':"No")+"</td></tr>"; });
+  html += "</table><h3>Routing decisions</h3><table><tr><th>Lead</th><th>State</th><th>Debt</th><th>Route</th><th>Partner</th><th>Reason</th></tr>";
+  lastRouted.forEach(function(r){ html += "<tr><td>"+esc(r.lead_id)+"</td><td>"+esc(r.state)+"</td><td>"+esc(r.debt_amount)+"</td><td>"+esc(r.route)+"</td><td>"+esc(r.partner)+"</td><td>"+esc(r.reason)+"</td></tr>"; });
+  html += "</table><h3>Duplicate-credit ledger</h3><table><tr><th>Vendor</th><th>Lead</th><th>Duplicate of</th><th>Credit status</th></tr>";
+  lastLedger.forEach(function(r){ html += "<tr><td>"+esc(r.vendor)+"</td><td>"+esc(r.lead_id)+"</td><td>"+esc(r.duplicate_of)+"</td><td>"+esc(r.credit_status)+"</td></tr>"; });
+  html += "</table>";
+  document.getElementById("results").innerHTML = html;
+  document.getElementById("dlRouted").style.display = "inline-block";
+  document.getElementById("dlLedger").style.display = "inline-block";
+}
+function download(name, text){
+  var blob = new Blob([text], {type:"text/csv"});
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; a.click(); URL.revokeObjectURL(a.href);
+}
+document.getElementById("configInput").value = JSON.stringify(L.DEFAULT_CONFIG, null, 2);
+document.getElementById("runBtn").addEventListener("click", run);
+document.getElementById("fileInput").addEventListener("change", function(e){
+  var f = e.target.files[0]; if(!f){return;}
+  var r = new FileReader(); r.onload = function(){ document.getElementById("csvInput").value = String(r.result); run(); }; r.readAsText(f);
+});
+document.getElementById("dlRouted").addEventListener("click", function(){ download("routed-leads.csv", L.buildRoutedCSV(lastRouted)); });
+document.getElementById("dlLedger").addEventListener("click", function(){ download("credit-ledger.csv", L.buildLedgerCSV(lastLedger)); });
+run();
+</script>
+</body>
+</html>
