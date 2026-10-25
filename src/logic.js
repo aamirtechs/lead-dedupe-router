@@ -81,7 +81,9 @@ function nameSimilarity(a, b) {
 }
 
 // Confidence that two leads are the same person.
-function pairScore(a, b) {
+// `opts.addressSignal` (opt-in) may raise a fuzzy score from a similar street
+// address; address alone never creates a cluster.
+function pairScore(a, b, opts) {
   const phoneA = normalizePhone(a.phone), phoneB = normalizePhone(b.phone);
   if (phoneA && phoneB && phoneA === phoneB) { return { score: 1, reasons: ["exact phone"] }; }
   const emailA = normalizeEmail(a.email), emailB = normalizeEmail(b.email);
@@ -91,10 +93,29 @@ function pairScore(a, b) {
     const sim = nameSimilarity(fullName(a), fullName(b));
     if (sim > 0) {
       // Name carries 70 percent, the shared ZIP carries 30 percent.
-      return { score: round2(sim * 0.7 + 0.3), reasons: ["fuzzy name and ZIP, name similarity " + sim] };
+      let score = sim * 0.7 + 0.3;
+      const reasons = ["fuzzy name and ZIP, name similarity " + sim];
+      if (opts && opts.addressSignal) {
+        const addr = addressSimilarity(a, b);
+        if (addr > 0) {
+          score = Math.min(1, score + 0.1 * addr);
+          reasons.push("address similarity " + addr);
+        }
+      }
+      return { score: round2(score), reasons: reasons };
     }
   }
   return { score: 0, reasons: [] };
+}
+
+function normalizeAddress(v) {
+  return String(v || "").toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function addressSimilarity(a, b) {
+  const x = normalizeAddress(a.address), y = normalizeAddress(b.address);
+  if (!x || !y) return 0;
+  return nameSimilarity(x, y);
 }
 
 function parseLeads(text) {
@@ -102,7 +123,7 @@ function parseLeads(text) {
   return parsed.rows.map(function (r) {
     return {
       lead_id: r.lead_id || "", first_name: r.first_name || "", last_name: r.last_name || "",
-      phone: r.phone || "", email: r.email || "", zip: r.zip || "", state: String(r.state || "").toUpperCase(),
+      phone: r.phone || "", email: r.email || "", zip: r.zip || "", address: r.address || "", state: String(r.state || "").toUpperCase(),
       debt_amount: r.debt_amount === "" || r.debt_amount === undefined ? null : Number(r.debt_amount),
       vendor: r.vendor || "", source: r.source || "", received_at: r.received_at || ""
     };
@@ -120,7 +141,7 @@ function detectDuplicates(leads, options) {
   const pairInfo = {};
   for (let i = 0; i < list.length; i++) {
     for (let j = i + 1; j < list.length; j++) {
-      const ps = pairScore(list[i], list[j]);
+      const ps = pairScore(list[i], list[j], opts);
       const isExact = ps.reasons.some(function (r) { return r.indexOf("exact") === 0; });
       if (isExact || ps.score >= fuzzyMin) {
         union(i, j);
@@ -256,6 +277,6 @@ function parseConfigJSON(text) {
   };
 }
 
-const api = { parseCSV: parseCSV, parseLeads: parseLeads, normalizePhone: normalizePhone, normalizeEmail: normalizeEmail, normalizeName: normalizeName, levenshtein: levenshtein, nameSimilarity: nameSimilarity, pairScore: pairScore, detectDuplicates: detectDuplicates, DEFAULT_CONFIG: DEFAULT_CONFIG, defaultConfig: DEFAULT_CONFIG, routeLead: routeLead, routeLeads: routeLeads, buildCreditLedger: buildCreditLedger, funnelCounts: funnelCounts, buildRoutedCSV: buildRoutedCSV, buildLedgerCSV: buildLedgerCSV, parseConfigJSON: parseConfigJSON };
+const api = { parseCSV: parseCSV, parseLeads: parseLeads, normalizePhone: normalizePhone, normalizeEmail: normalizeEmail, normalizeName: normalizeName, normalizeAddress: normalizeAddress, levenshtein: levenshtein, nameSimilarity: nameSimilarity, addressSimilarity: addressSimilarity, pairScore: pairScore, detectDuplicates: detectDuplicates, DEFAULT_CONFIG: DEFAULT_CONFIG, defaultConfig: DEFAULT_CONFIG, routeLead: routeLead, routeLeads: routeLeads, buildCreditLedger: buildCreditLedger, funnelCounts: funnelCounts, buildRoutedCSV: buildRoutedCSV, buildLedgerCSV: buildLedgerCSV, parseConfigJSON: parseConfigJSON };
 if (typeof module !== "undefined" && module.exports) { module.exports = api; }
 if (typeof window !== "undefined") { window.LeadDedupeRouter = api; }
